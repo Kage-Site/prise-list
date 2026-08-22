@@ -1,0 +1,414 @@
+/* ============ RESET ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+body {
+  font-family: 'Jost', sans-serif;
+  background: #050506;
+  color: #ece7dd;
+  overflow-x: hidden;
+}
+
+/* ============ STAGE (desktop centering) ============ */
+.stage {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background:
+    radial-gradient(ellipse at 50% -10%, #1a1712 0%, #050506 55%),
+    #050506;
+  padding: 0;
+}
+
+.app {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  min-height: 100vh;
+  background: #0b0b0d;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+@media (min-width: 500px) {
+  .stage { padding: 48px 16px; }
+  .app {
+    min-height: 92vh;
+    border-radius: 28px;
+    box-shadow:
+      0 0 0 1px rgba(212,175,55,0.18),
+      0 40px 90px -20px rgba(0,0,0,0.85),
+      0 0 120px -40px rgba(212,175,55,0.15);
+  }
+}
+
+/* ============ AMBIENT SCATTERED SYRINGES ============ */
+.ambient {
+  position: absolute;
+  left: 0; right: 0;
+  top: 400px;    /* starts below hero photo, never overlaps it */
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ambient .syringe {
+  position: absolute;
+  left: var(--left);
+  top: var(--top);
+  width: var(--w);
+  opacity: var(--op);
+  filter: drop-shadow(0 0 5px rgba(212,175,55,0.35));
+  animation-name: float;
+  animation-duration: var(--dur);
+  animation-delay: var(--delay);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.ambient .syringe svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: rotate(var(--rot));
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50%      { transform: translate(var(--dx), var(--dy)) rotate(8deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient .syringe { animation: none; }
+}
+
+/* ============ HEADER / HERO ============ */
+.hero {
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+.hero-photo {
+  display: block;
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  margin: 0;
+}
+.hero-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11,11,13,0) 40%, rgba(11,11,13,0.65) 78%, #0b0b0d 100%);
+}
+.hero-text {
+  position: absolute;
+  left: 0; right: 0; bottom: 20px;
+  text-align: center;
+}
+.brand {
+  font-family: 'Marcellus', serif;
+  font-size: 2.1rem;
+  letter-spacing: 0.06em;
+  font-weight: 400;
+  color: #f3dfa1;
+  text-shadow: 0 0 18px rgba(243,217,139,0.55), 0 0 2px rgba(243,217,139,0.5);
+}
+.brand-sub {
+  margin-top: 4px;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: #cbb37a;
+  padding-left: 0.42em;
+}
+
+/* ============ PRICE CONTAINER ============ */
+.price {
+  position: relative;
+  z-index: 1;
+  padding: 30px 22px 14px;
+}
+
+/* ============ SECTION TITLES ============ */
+.section-title {
+  text-align: center;
+  margin-bottom: 22px;
+}
+.title-diamond {
+  display: block;
+  width: 8px; height: 8px;
+  margin: 0 auto 12px;
+  background: linear-gradient(135deg, #f6e3a3, #a37e21);
+  transform: rotate(45deg);
+  box-shadow: 0 0 10px rgba(212,175,55,0.6);
+}
+.section-title h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: 0.03em;
+  color: #e9cd82;
+  text-shadow: 0 0 16px rgba(212,175,55,0.35);
+}
+.title-sub {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7d7568;
+}
+
+/* ============ ITEMS LIST ============ */
+.items { list-style: none; }
+
+.item {
+  padding: 12px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.5s ease;
+}
+.item + .item { margin-top: 1px; }
+
+.item.is-tapped {
+  background: radial-gradient(ellipse at center, rgba(212,175,55,0.16) 0%, rgba(212,175,55,0.03) 70%, transparent 100%);
+}
+
+/* single row: num | name | dotted leader | price — all vertically centered */
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.num {
+  flex: 0 0 22px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.78rem;
+  color: #6b6355;
+  align-self: flex-start;
+  padding-top: 0.2em;
+}
+
+.name {
+  flex: 0 1 auto;
+  font-size: 0.87rem;
+  font-weight: 400;
+  line-height: 1.32;
+  color: #ece7dd;
+}
+.name em {
+  font-style: normal;
+  color: #a39a89;
+  font-size: 0.82rem;
+}
+
+/* --- dotted leader, vertically centered on text's middle line --- */
+.leader {
+  flex: 1 1 auto;
+  min-width: 14px;
+  align-self: center;
+  height: 3px;
+  background-image: radial-gradient(circle, #8a7a48 1px, transparent 1.3px);
+  background-position: center;
+  background-size: 7px 3px;
+  background-repeat: repeat-x;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6px, #000 calc(100% - 4px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 6px, #000 calc(100% - 4px), transparent 100%);
+}
+
+.item .price {
+  flex: 0 0 auto;
+  align-self: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #e9cd82;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* description line for section 3 — indented to align under name, not number */
+.desc {
+  display: block;
+  margin-top: 4px;
+  padding-left: 30px;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: #8c8272;
+  letter-spacing: 0.01em;
+}
+
+/* ============ DIVIDER WITH LIPS ============ */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 30px 4px 26px;
+}
+.divider .line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d4af37 50%, transparent);
+  opacity: 0.5;
+}
+.divider .lips {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 20px;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 5px rgba(212,175,55,0.35));
+}
+
+/* ============ DISCLAIMER ============ */
+.disclaimer {
+  text-align: center;
+  font-size: 0.66rem;
+  line-height: 1.6;
+  color: #6b6355;
+  padding: 0 10px 24px;
+}
+
+/* ============ CTA BUTTONS ============ */
+.cta-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 4px 30px;
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 999px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+}
+.cta:active { transform: scale(0.97); }
+
+.cta-primary {
+  color: #0b0b0d;
+  background: linear-gradient(135deg, #f6e3a3, #d4af37 45%, #a37e21);
+  box-shadow: 0 10px 30px -8px rgba(212,175,55,0.55);
+}
+.cta-primary:active {
+  box-shadow: 0 4px 14px -6px rgba(212,175,55,0.55);
+}
+
+.cta-secondary {
+  color: #e9cd82;
+  background: transparent;
+  border: 1px solid rgba(212,175,55,0.45);
+}
+.cta-secondary:active {
+  background: rgba(212,175,55,0.08);
+}
+.ig-icon {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+}
+
+.app-footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 0 26px;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: #4a463c;
+}
+.app-footer span { color: #7d7558; font-family: 'Marcellus', serif; }
+
+/* ============ REVEAL-ON-LOAD ============ */
+[data-reveal] {
+  animation: rise 0.7s cubic-bezier(0.16,1,0.3,1) both;
+}
+.section:nth-of-type(1) { animation-delay: 0.05s; }
+.section:nth-of-type(2) { animation-delay: 0.15s; }
+.section:nth-of-type(3) { animation-delay: 0.25s; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Focus visibility for keyboard users */
+.item:focus-visible,
+.cta:focus-visible {
+  outline: 1.5px solid #d4af37;
+  outline-offset: 2px;
+}
+/* ============================================================
+   ДОДАТКИ: слайдер у шапці + фікс OLED-стику + стани прайсу
+   Додати цей блок у КІНЕЦЬ style.css
+   ============================================================ */
+
+/* ---- Жорсткий фікс фону для OLED-екранів ---- */
+html, body {
+  background-color: #0c0c0c !important;
+}
+
+/* ============ HERO SLIDER ============ */
+.hero-slider {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  background-color: #0c0c0c; /* fills any gap before first image paints */
+}
+
+.hero-slider .slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  will-change: opacity;
+}
+
+.hero-slider .slide.is-active {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Reduced motion: skip the cross-fade, just show the active slide instantly */
+@media (prefers-reduced-motion: reduce) {
+  .hero-slider .slide { transition: none; }
+}
+
+/* ---- Затемнення внизу слайдера, щоб не було стику з фоном на OLED ---- */
+.hero-veil {
+  /* extend slightly beyond the hero and deepen the base tone so it blends
+     seamlessly with the #0c0c0c page background on OLED panels */
+  background: linear-gradient(
+    180deg,
+    rgba(11,11,13,0) 40%,
+    rgba(11,11,13,0.65) 78%,
+    #0c0c0c 100%
+  );
+  z-index: 2;
+}
+
+/* ============ PRICE LIST LOADING / ERROR STATES ============ */
+.pricelist-loading,
+.pricelist-error {
+  text-align: center;
+  padding: 40px 10px;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: #7d7568;
+}
+.pricelist-error {
+  color: #c98a6b;
+}
